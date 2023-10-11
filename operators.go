@@ -19,25 +19,20 @@ type geo struct {
 	dbtype   string
 }
 
-func newGeolookupCreator(database []byte) func(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
+func newGeolookupCreator(db *geoip2.Reader) func(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
 	return func(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
-		return newGeolookup(options, database)
+		return newGeolookup(options, db)
 	}
 }
 
-func newGeolookup(options plugintypes.OperatorOptions, database []byte) (plugintypes.Operator, error) {
+func newGeolookup(options plugintypes.OperatorOptions, db *geoip2.Reader) (plugintypes.Operator, error) {
 	data := strings.Split(options.Arguments, " ")
 
 	if len(data) < 1 {
-		return nil, fmt.Errorf("missing database file")
+		return nil, fmt.Errorf("missing database type")
 	}
 
 	dbtype := data[0]
-
-	db, err := geoip2.FromBytes(database)
-	if err != nil {
-		return nil, err
-	}
 
 	return &geo{db: db, dbtype: dbtype}, nil
 }
