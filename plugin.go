@@ -1,12 +1,9 @@
 package plugin
 
 import (
-	"github.com/corazawaf/coraza/v2"
-	"github.com/corazawaf/coraza/v2/operators"
-	"github.com/corazawaf/coraza/v2/seclang"
+	"github.com/corazawaf/coraza/v3/experimental/plugins"
 )
 
 func init() {
-	operators.RegisterPlugin("geoLookup", func() coraza.RuleOperator { return new(geoLookup) })
-	seclang.RegisterDirectivePlugin("secGeoLookupDb", directiveSecGeoLookupDb)
+	plugins.RegisterOperator("geoLookup", newGeolookup)
 }
