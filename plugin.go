@@ -5,5 +5,5 @@ import (
 )
 
 func init() {
-	plugins.RegisterOperator("geoLookup", newGeolookup)
+	plugins.RegisterOperator("geoLookupEmbedded", newGeolookup)
 }

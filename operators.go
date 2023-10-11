@@ -1,6 +1,7 @@
 package plugin
 
 import (
+	_ "embed"
 	"fmt"
 	"net"
 	"strconv"
@@ -13,26 +14,26 @@ import (
 )
 
 
+var (
+	//go:embed database.file
+	database []byte
+)
+
 type geo struct {
 	db 		 *geoip2.Reader
-	dbtype string
+	dbtype   string
 }
 
 func newGeolookup(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
 	data := strings.Split(options.Arguments, " ")
 
-	if len(data) < 2 {
+	if len(data) < 1 {
 		return nil, fmt.Errorf("missing database file")
 	}
 
-	databaseFile := data[0]
-	if databaseFile == "" {
-		return nil, fmt.Errorf("missing database file")
-	}
+	dbtype := data[0]
 
-	dbtype := data[1]
-
-	db, err := geoip2.Open(databaseFile)
+	db, err := geoip2.FromBytes(database)
 	if err != nil {
 		return nil, err
 	}
