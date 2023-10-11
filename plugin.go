@@ -4,6 +4,7 @@ import (
 	"github.com/corazawaf/coraza/v3/experimental/plugins"
 )
 
-func init() {
-	plugins.RegisterOperator("geoLookupEmbedded", newGeolookup)
+func RegisterGeoDatabase(database []byte) {
+	plugins.RegisterOperator("geoLookupEmbedded", newGeolookupCreator(database))
 }
+

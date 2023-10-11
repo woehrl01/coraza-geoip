@@ -14,17 +14,18 @@ import (
 )
 
 
-var (
-	//go:embed database.file
-	database []byte
-)
-
 type geo struct {
 	db 		 *geoip2.Reader
 	dbtype   string
 }
 
-func newGeolookup(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
+func newGeolookupCreator(database []byte) func(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
+	return func(options plugintypes.OperatorOptions) (plugintypes.Operator, error) {
+		return newGeolookup(options, database)
+	}
+}
+
+func newGeolookup(options plugintypes.OperatorOptions, database []byte) (plugintypes.Operator, error) {
 	data := strings.Split(options.Arguments, " ")
 
 	if len(data) < 1 {
